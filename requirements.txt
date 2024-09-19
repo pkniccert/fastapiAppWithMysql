@@ -1,0 +1,8 @@
+fastapi[all]
+sqlalchemy
+mysqlclient
+python-dotenv
+pydantic
+alembic
+pymysql
+aiomysql
