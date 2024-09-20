@@ -1,7 +1,7 @@
 from fastapi import FastAPI, Request
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
-from .api import main_router
+from .api import v1_router
 
 app = FastAPI()
 
@@ -15,5 +15,9 @@ async def custom_http_exception_handler(request: Request, exc: HTTPException) ->
         },
     )
 
+@app.get("/")
+async def read_get():
+    return {"status":"success", "message": "This is test route"}
+
 # Include the main router with a prefix
-app.include_router(main_router, prefix="/api/v1")
+app.include_router(v1_router)
