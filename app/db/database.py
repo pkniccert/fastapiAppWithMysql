@@ -1,16 +1,11 @@
 # database.py
-import os
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-from dotenv import load_dotenv
-
-# Load environment variables from .env file
-load_dotenv()
-
+from app.core.config import DB_USER, DB_PASSWORD, DB_HOST, DB_PORT, DB_NAME
 # Database URL
 DATABASE_URL = (
-    f"mysql+mysqldb://{os.getenv('DB_USER')}:{os.getenv('DB_PASSWORD')}@"
-    f"{os.getenv('DB_HOST')}:{os.getenv('DB_PORT')}/{os.getenv('DB_NAME')}"
+    f"mysql+mysqldb://{DB_USER}:{DB_PASSWORD}@"
+    f"{DB_HOST}:{DB_PORT}/{DB_NAME}"
 )
 
 # Create the SQLAlchemy engine

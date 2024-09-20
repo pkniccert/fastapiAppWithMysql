@@ -6,3 +6,5 @@ pydantic
 alembic
 pymysql
 aiomysql
+jwt
+passlib

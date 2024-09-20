@@ -16,4 +16,5 @@ class PermissionResponse(BaseModel):
     updated_at: datetime
 
     class Config:
-        from_attributes = True  # Updated from 'orm_mode' to 'from_attributes'
+        orm_mode = True  # Allow ORM models
+        from_attributes = True  # Allow usage of from_orm

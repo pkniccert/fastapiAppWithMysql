@@ -11,6 +11,6 @@ main_router = APIRouter()
 
 # Include all sub-routers
 main_router.include_router(user_router, prefix="/users", tags=["users"])
-# main_router.include_router(role_router, prefix="/roles", tags=["roles"])
-# main_router.include_router(permission_router, prefix="/permissions", tags=["permissions"])
-# main_router.include_router(role_permission_router, prefix="/role-permissions", tags=["role-permissions"])
+main_router.include_router(role_router, prefix="/roles", tags=["roles"])
+main_router.include_router(permission_router, prefix="/permissions", tags=["permissions"])
+main_router.include_router(role_permission_router, prefix="/role-permissions", tags=["role-permissions"])

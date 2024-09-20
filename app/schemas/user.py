@@ -1,4 +1,4 @@
-from pydantic import BaseModel, EmailStr
+from pydantic import BaseModel, EmailStr, validator, Field
 from datetime import datetime
 from app.dependencies.status import Status
 
@@ -9,9 +9,21 @@ class UserCreate(BaseModel):
     last_name: str = None
     username: str
     email: EmailStr
-    password: str
+    password: str = Field(min_length=8)  # Ensure password is at least 8 characters long
     role_id: int
     status: Status = Status.active  # Default to active status
+
+    @validator('username')
+    def validate_username(cls, v):
+        if len(v) < 3:
+            raise ValueError('Username must be at least 3 characters long')
+        return v
+
+    @validator('role_id')
+    def validate_role_id(cls, v):
+        if v <= 0:
+            raise ValueError('Role ID must be a positive integer')
+        return v
 
 # Pydantic model for user response
 class UserResponse(BaseModel):
@@ -27,5 +39,5 @@ class UserResponse(BaseModel):
     updated_at: datetime
 
     class Config:
-        from_attributes = True  # Updated from 'orm_mode' to 'from_attributes'
-        
+        orm_mode = True  # Allow ORM models
+        from_attributes = True  # Allow usage of from_orm
