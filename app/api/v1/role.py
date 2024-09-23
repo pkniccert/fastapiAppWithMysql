@@ -1,9 +1,10 @@
 from fastapi import APIRouter, HTTPException, Depends
 from sqlalchemy.exc import SQLAlchemyError
-from sqlalchemy.orm import Session
+from sqlalchemy.orm import Session, selectinload
 from sqlalchemy.future import select
-from app.models import Role  # Import your SQLAlchemy Role model
+from app.models import Role, Permission  # Import your SQLAlchemy Role model
 from app.schemas.role import RoleCreate, RoleResponse  # Import your Pydantic models
+from app.schemas.permission import PermissionResponse
 from app.db.database import get_db  # Assuming you have a function to get DB sessions
 from app.utils.successResponse import success_response
 from app.utils.handle_db_error import handle_db_error
@@ -40,14 +41,16 @@ async def create_role(role: RoleCreate, db: Session = Depends(get_db)):
 @router.get("/{role_id}", response_model=RoleResponse)
 async def read_role(role_id: int, db: Session = Depends(get_db)):
  try:
-    stmt = select(Role).where(Role.id == role_id)
-    result = db.execute(stmt)
-    role = result.scalars().first()
+    role = db.query(Role).options(selectinload(Role.permissions)).filter(Role.id == role_id).first()
     if role is None:
         raise HTTPException(status_code=404, detail="Role not found")
-   
+    permissions = [PermissionResponse(id=perm.permission.id, name=perm.permission.name) for perm in role.permissions]
     # Convert SQLAlchemy model to Pydantic model
-    role_response = RoleResponse.from_orm(role)
+    role_response = RoleResponse(
+            id=role.id,
+            name=role.name,
+            permissions=permissions  # Extract permission names
+        )
 
     # Convert datetime fields to ISO format strings
     role_response_dict = role_response.dict()

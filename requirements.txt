@@ -6,5 +6,6 @@ pydantic
 alembic
 pymysql
 aiomysql
-jwt
+PyJWT
 passlib
+bcrypt

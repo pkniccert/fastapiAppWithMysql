@@ -3,8 +3,12 @@ from fastapi.exceptions import RequestValidationError
 from fastapi.responses import JSONResponse
 from fastapi.exceptions import HTTPException
 from .api import v1_router
+from .middleware.auth import AuthMiddleware
 
 app = FastAPI()
+
+
+app.add_middleware(AuthMiddleware)
 
 @app.exception_handler(RequestValidationError)
 async def validation_exception_handler(request: Request, exc: RequestValidationError):

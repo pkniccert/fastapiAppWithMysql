@@ -41,3 +41,10 @@ class UserResponse(BaseModel):
     class Config:
         orm_mode = True  # Allow ORM models
         from_attributes = True  # Allow usage of from_orm
+
+class UserCheckInDB(BaseModel):
+    username: str
+    password: str
+
+class UserInDB(UserResponse):
+    password: str
